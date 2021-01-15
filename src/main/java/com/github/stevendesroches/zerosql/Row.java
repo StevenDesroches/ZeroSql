@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+/*
+ * Original Source : https://stackoverflow.com/questions/16882971/retrieve-entire-row-with-resultset
+ */
+
 public class Row {
     private Map<String, Entry<Class, Object>> row;
 
