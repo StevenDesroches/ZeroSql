@@ -6,12 +6,13 @@ import com.zaxxer.hikari.HikariDataSource;
 public class ZeroSql {
 
     private boolean usable = false;
-    private Functions functions;
+    private ZeroSqlFunctionsManager zeroSqlFunctionsManager;
 
     private HikariConfig hikariConfig;
     private HikariDataSource hikariDataSource;
 
-    public void initialisation(String host, String port, String database, String username, String password) {
+    public boolean initialisation(String host, String port, String database, String username, String password) {
+        hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database);
         hikariConfig.setUsername(username);
         hikariConfig.setPassword(password);
@@ -19,14 +20,19 @@ public class ZeroSql {
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         hikariConfig.setAutoCommit(true);
 
-        openSourceConnection();
+        return openSourceConnection();
     }
 
-    public boolean openSourceConnection() {
+    public ZeroSqlFunctionsManager getZeroSqlFunctionsManager() {
+        return zeroSqlFunctionsManager;
+    }
+
+    private boolean openSourceConnection() {
         boolean result = false;
         if (hikariConfig != null) {
             hikariDataSource = new HikariDataSource(hikariConfig);
-            functions = new Functions(hikariDataSource);
+            zeroSqlFunctionsManager = new ZeroSqlFunctionsManager(hikariDataSource);
+            result = true;
         }
         return result;
     }
@@ -35,7 +41,7 @@ public class ZeroSql {
         if (hikariDataSource != null && !hikariDataSource.isClosed()) {
             hikariDataSource.close();
             hikariDataSource = null;
-            functions = null;
+            zeroSqlFunctionsManager = null;
         }
     }
 

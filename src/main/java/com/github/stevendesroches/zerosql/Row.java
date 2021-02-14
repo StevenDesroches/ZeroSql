@@ -19,7 +19,7 @@ public class Row {
     }
 
     public void add(String column, Object data, String type) {
-        Class castType = RowUtil.ROW_TYPE.get(type.toUpperCase());
+        Class castType = RowUtil.TYPE.get(type.toUpperCase());
         try {
             this.add(column, castType.cast(data));
         } catch (NullPointerException e) {
@@ -29,6 +29,22 @@ public class Row {
 
     private <T> void add(String column, T data) {
         row.put(column, new AbstractMap.SimpleEntry<>(data.getClass(), data));
+    }
+
+    public Object getVal(String column) {
+        Object result = null;
+        if (row != null) {
+            result = row.get(column).getValue();
+        }
+        return result;
+    }
+
+    public Class getClass(String column) {
+        Class result = null;
+        if (row != null) {
+            result = row.get(column).getKey();
+        }
+        return result;
     }
 
     public Entry get(String column) {
