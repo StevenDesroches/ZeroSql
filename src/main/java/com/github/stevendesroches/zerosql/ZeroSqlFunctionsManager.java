@@ -91,7 +91,7 @@ public class ZeroSqlFunctionsManager {
             resultSet = statement.executeQuery();
             resultSetMetaData = resultSet.getMetaData();
 
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 Row currentRow = new Row();
                 for (int i = 1; i <= resultSetMetaData.getColumnCount(); i++) {
                     currentRow.add(resultSetMetaData.getColumnName(i), resultSet.getObject(i), resultSetMetaData.getColumnTypeName(i));
